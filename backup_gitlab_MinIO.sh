@@ -2,12 +2,7 @@
 
 # Variables
 GITLAB_BACKUP="/var/opt/gitlab/backups"
-LATEST_BACKUP=$(basename $(ls -Art $GITLAB_BACKUP/*.tar 2>/dev/null | tail -n 1))
-
-
 GITLAB_ETC="/etc/gitlab/config_backup"
-LATEST_ETC=$(basename $(ls -Art $GITLAB_ETC/*.tar 2>/dev/null | tail -n 1))
-
 
 GITLAB_TMP="/root/backup"
 BACKUP_DATE=`date '+%F'`
@@ -36,6 +31,8 @@ echo "[3/5] $(date "+%d-%m-%Y_%H:%M:%S") - Backup Gitlab config..." >> $LOG_FILE
 sudo gitlab-ctl backup-etc >> $LOG_FILE
 
 # Compress files all in one
+LATEST_BACKUP=$(basename $(ls -Art $GITLAB_BACKUP/*.tar 2>/dev/null | tail -n 1))
+LATEST_ETC=$(basename $(ls -Art $GITLAB_ETC/*.tar 2>/dev/null | tail -n 1))
 echo "[4/5] $(date "+%d-%m-%Y_%H:%M:%S") - Compress files all in one..." >> $LOG_FILE
 if [[ -z "$LATEST_BACKUP" || -z "$LATEST_ETC" ]]; then
   echo "Not found file .tar in $GITLAB_BACKUP or $GITLAB_ETC. Exit script." >> $LOG_FILE
